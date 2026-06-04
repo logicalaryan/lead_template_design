@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Template - Setup | CRM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <span>CRM Setup</span>
+        </div>
+        <nav class="topbar-nav">
+            <a href="#">Modules</a>
+            <a href="#">Automation</a>
+            <a href="#">Settings</a>
+        </nav>
+    </div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h1>Lead Template</h1>
+            <div class="breadcrumb">
+                <a href="#">Setup</a> &rsaquo; <a href="#">Modules and Fields</a> &rsaquo; Leads
+            </div>
+        </div>
+        <div class="page-header-right">
+            <button class="btn btn-secondary" id="addFieldBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Field
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-bar">
+        <button class="tab-btn active" data-tab="template">Lead Template</button>
+        <button class="tab-btn" data-tab="fields">Fields</button>
+        <button class="tab-btn" data-tab="schema">JSON Schema</button>
+        <button class="tab-btn" data-tab="leads">All Leads</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+
+        <!-- ======== TAB 1: Lead Template (fillable form) ======== -->
+        <div class="tab-panel active" id="tab-template">
+            <div class="preview-container">
+                <div class="preview-card">
+                    <div class="preview-card-header">Lead Template</div>
+                    <form id="leadTemplateForm" novalidate>
+                        <div class="preview-form">
+                            <div class="preview-grid" id="templateGrid">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                        <div class="preview-card-footer">
+                            <button type="button" class="btn btn-secondary" id="clearTemplateBtn">Clear</button>
+                            <button type="submit" class="btn btn-primary">Save Lead</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== TAB 2: Fields (configuration + values) ======== -->
+        <div class="tab-panel" id="tab-fields">
+            <div class="fields-header">
+                <h2>Lead Information</h2>
+                <span style="font-size:0.8rem; color:var(--text-muted);" id="fieldCount"></span>
+            </div>
+            <div class="fields-table-wrapper">
+                <table class="fields-table">
+                    <thead>
+                        <tr>
+                            <th style="width:4%">#</th>
+                            <th style="width:18%">Field Name</th>
+                            <th style="width:12%">Type</th>
+                            <th style="width:12%">Format</th>
+                            <th style="width:10%">Required</th>
+                            <th style="width:16%">Validation</th>
+                            <th style="width:20%">Current Value</th>
+                            <th style="width:8%"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="fieldsTableBody">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ======== TAB 3: JSON Schema ======== -->
+        <div class="tab-panel" id="tab-schema">
+            <div class="schema-container">
+                <div class="schema-card">
+                    <div class="schema-card-header">
+                        <h3>Generated JSON Schema</h3>
+                        <button class="btn btn-secondary" id="copySchemaBtn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                            Copy
+                        </button>
+                    </div>
+                    <div class="schema-body">
+                        <pre id="schemaOutput"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== TAB 4: All Leads ======== -->
+        <div class="tab-panel" id="tab-leads">
+            <div class="fields-header">
+                <h2>All Leads</h2>
+                <span style="font-size:0.8rem; color:var(--text-muted);" id="leadsCount"></span>
+            </div>
+            <div id="leadsEmptyState" class="leads-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+                <p>No leads saved yet.</p>
+                <p style="font-size:0.8rem; color:var(--text-muted)">Fill out the Lead Template and click "Save Lead" to add entries here.</p>
+            </div>
+            <div class="fields-table-wrapper" id="leadsTableWrapper" style="display:none">
+                <table class="fields-table">
+                    <thead>
+                        <tr id="leadsTableHead">
+                            <!-- Rendered by JS -->
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTableBody">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Add / Edit Field Modal -->
+    <div class="modal-overlay" id="fieldModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Field</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-rules">
+                    <strong>Rules:</strong>
+                    <ul>
+                        <li>Field name must be in <code>camelCase</code> (e.g. companyName)</li>
+                        <li>3–30 characters, letters and numbers only</li>
+                        <li>No duplicate field names allowed</li>
+                        <li>Format must be compatible with selected Type</li>
+                    </ul>
+                </div>
+                <div class="modal-field">
+                    <label for="modalFieldName">Field Name <span style="color:var(--error)">*</span></label>
+                    <input type="text" id="modalFieldName" placeholder="e.g. companyName">
+                    <span class="modal-error" id="modalNameError"></span>
+                </div>
+                <div class="modal-row">
+                    <div class="modal-field">
+                        <label for="modalFieldType">Type <span style="color:var(--error)">*</span></label>
+                        <select id="modalFieldType">
+                            <option value="string">String</option>
+                            <option value="url">URL</option>
+                            <option value="date">Date</option>
+                            <option value="number">Number</option>
+                        </select>
+                    </div>
+                    <div class="modal-field">
+                        <label for="modalFieldFormat">Format <span style="color:var(--error)">*</span></label>
+                        <select id="modalFieldFormat">
+                            <option value="none">None</option>
+                            <option value="email">Email</option>
+                            <option value="phone">Phone</option>
+                            <option value="url">URL</option>
+                            <option value="date">Date</option>
+                        </select>
+                        <span class="modal-error" id="modalFormatError"></span>
+                    </div>
+                </div>
+                <div class="modal-field checkbox-field">
+                    <input type="checkbox" id="modalFieldRequired">
+                    <label for="modalFieldRequired">Mark as Required</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modalCancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="modalSaveBtn">Save Field</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

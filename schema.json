@@ -1,0 +1,36 @@
+{
+  "leadName": {
+    "type": "string",
+    "required": true
+  },
+  "email": {
+    "type": "string",
+    "format": "email",
+    "required": false
+  },
+  "phone": {
+    "type": "string",
+    "format": "phone",
+    "required": false
+  },
+  "linkedinUrl": {
+    "type": "url",
+    "required": false
+  },
+  "xUrl": {
+    "type": "url",
+    "required": false
+  },
+  "leadSource": {
+    "type": "string",
+    "required": false
+  },
+  "leadFoundDate": {
+    "type": "date",
+    "required": true
+  },
+  "nextActionDate": {
+    "type": "date",
+    "required": false
+  }
+}
