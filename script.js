@@ -1,14 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ============================================
+    // Currencies list representing all countries
+    // ============================================
+    const CURRENCIES = [
+        { code: 'USD', name: 'USD - US Dollar ($)' },
+        { code: 'EUR', name: 'EUR - Euro (€)' },
+        { code: 'GBP', name: 'GBP - British Pound (£)' },
+        { code: 'INR', name: 'INR - Indian Rupee (₹)' },
+        { code: 'AUD', name: 'AUD - Australian Dollar (A$)' },
+        { code: 'CAD', name: 'CAD - Canadian Dollar (C$)' },
+        { code: 'JPY', name: 'JPY - Japanese Yen (¥)' },
+        { code: 'CNY', name: 'CNY - Chinese Yuan (¥)' },
+        { code: 'CHF', name: 'CHF - Swiss Franc (CHF)' },
+        { code: 'NZD', name: 'NZD - New Zealand Dollar (NZ$)' },
+        { code: 'SGD', name: 'SGD - Singapore Dollar (S$)' },
+        { code: 'HKD', name: 'HKD - Hong Kong Dollar (HK$)' },
+        { code: 'AED', name: 'AED - UAE Dirham (AED)' },
+        { code: 'SAR', name: 'SAR - Saudi Riyal (SR)' },
+        { code: 'ZAR', name: 'ZAR - South African Rand (R)' },
+        { code: 'BRL', name: 'BRL - Brazilian Real (R$)' },
+        { code: 'RUB', name: 'RUB - Russian Ruble (₽)' },
+        { code: 'KRW', name: 'KRW - South Korean Won (₩)' },
+        { code: 'MXN', name: 'MXN - Mexican Peso ($)' },
+        { code: 'TRY', name: 'TRY - Turkish Lira (₺)' },
+        { code: 'IDR', name: 'IDR - Indonesian Rupiah (Rp)' },
+        { code: 'MYR', name: 'MYR - Malaysian Ringgit (RM)' },
+        { code: 'PHP', name: 'PHP - Philippine Peso (₱)' },
+        { code: 'THB', name: 'THB - Thai Baht (฿)' },
+        { code: 'VND', name: 'VND - Vietnamese Dong (₫)' },
+        { code: 'SEK', name: 'SEK - Swedish Krona (kr)' },
+        { code: 'NOK', name: 'NOK - Norwegian Krone (kr)' },
+        { code: 'DKK', name: 'DKK - Danish Krone (kr)' },
+        { code: 'PLN', name: 'PLN - Polish Zloty (zł)' },
+        { code: 'EGP', name: 'EGP - Egyptian Pound (E£)' }
+    ];
+
+    // ============================================
     // Default Lead Fields (the template data)
     // ============================================
     let fields = [
         { id: 'f1', name: 'leadName',       type: 'string', format: 'none',  required: true,  validation: '' },
-        { id: 'f2', name: 'phone',           type: 'string', format: 'phone', required: false, validation: '' },
         { id: 'f3', name: 'email',           type: 'string', format: 'email', required: false, validation: '' },
         { id: 'f4', name: 'linkedinUrl',     type: 'url',    format: 'url',   required: false, validation: '' },
-        { id: 'f5', name: 'xUrl',            type: 'url',    format: 'url',   required: false, validation: '' },
-        { id: 'f6', name: 'leadSource',      type: 'string', format: 'none',  required: false, validation: '' },
+        { id: 'f9', name: 'currency',        type: 'string', format: 'currency', required: false, validation: '' },
         { id: 'f7', name: 'leadFoundDate',   type: 'date',   format: 'date',  required: true,  validation: 'Cannot be a future date' },
         { id: 'f8', name: 'nextActionDate',  type: 'date',   format: 'date',  required: false, validation: 'Must be today or future' },
     ];
@@ -20,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let savedLeads = [];
 
     let editingFieldId = null;
-    let fieldIdCounter = 9;
+    let fieldIdCounter = 10;
 
     // ============================================
     // DOM References
@@ -82,14 +116,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentVal = fieldValues[f.name] || '';
             let inputHtml = '';
 
-            if (f.type === 'date') {
+            if (f.format === 'currency') {
+                const options = CURRENCIES.map(curr => {
+                    const selected = currentVal === curr.code ? 'selected' : '';
+                    return `<option value="${curr.code}" ${selected}>${curr.name}</option>`;
+                }).join('');
+                inputHtml = `
+                    <select name="${f.name}" id="tmpl_${f.name}">
+                        <option value="">-- Select Currency --</option>
+                        ${options}
+                    </select>
+                `;
+            } else if (f.type === 'date') {
                 inputHtml = `<input type="date" name="${f.name}" id="tmpl_${f.name}" value="${currentVal}">`;
             } else if (f.type === 'url') {
                 inputHtml = `<input type="url" name="${f.name}" id="tmpl_${f.name}" placeholder="https://..." value="${escapeAttr(currentVal)}">`;
             } else if (f.format === 'email') {
                 inputHtml = `<input type="email" name="${f.name}" id="tmpl_${f.name}" placeholder="name@example.com" value="${escapeAttr(currentVal)}">`;
-            } else if (f.format === 'phone') {
-                inputHtml = `<input type="tel" name="${f.name}" id="tmpl_${f.name}" placeholder="+1 (555) 000-0000" value="${escapeAttr(currentVal)}">`;
             } else {
                 inputHtml = `<input type="text" name="${f.name}" id="tmpl_${f.name}" placeholder="Enter ${label.toLowerCase()}" value="${escapeAttr(currentVal)}">`;
             }
@@ -109,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
 
         // Bind input listeners to sync values in real time
-        templateGrid.querySelectorAll('input').forEach(input => {
+        templateGrid.querySelectorAll('input, select').forEach(input => {
             input.addEventListener('input', () => {
                 fieldValues[input.name] = input.value;
                 // Clear error state on type
@@ -309,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Format compatibility map: which formats are valid for each type
     const FORMAT_COMPAT = {
-        string: ['none', 'email', 'phone'],
+        string: ['none', 'email', 'currency'],
         url:    ['url', 'none'],
         date:   ['date', 'none'],
         number: ['none'],
